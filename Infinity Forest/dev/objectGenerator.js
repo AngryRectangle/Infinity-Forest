@@ -78,7 +78,41 @@ function setObject(array,coords, bool){
 		var y = array[i].y;
 		var z = array[i].z;
 		if(!bool||World.getBlock(x+coords.x,y+coords.y,z+coords.z).id==0){
-			World.setBlock(x+coords.x,y+coords.y,z+coords.z, array[i].id, array[i].data);
+			var id = array[i].id;
+			var data = array[i].data;
+			if(id==17){
+				if(data==2){
+					id = BlockID.pinkLog;
+					data=0;
+				}else if(data==0){
+					id = BlockID.eucalyptusLog;
+				}else if(data==4){
+					id = BlockID.eucalyptusLog;
+					data=1;
+				}else if(data==8){
+					id = BlockID.eucalyptusLog;
+					data=2;
+				}else if(data==6){
+					id = BlockID.pinkLog;
+					data=1;
+				}else if(data==10){
+					id = BlockID.pinkLog;
+					data=2;
+				}
+			}
+			if(id==5){
+				data = 2;
+			}
+			if(id==85){
+				data=2;
+			}
+			if(id==53){
+				id=135; 
+			}
+			if(id==18){
+				data=1;
+			}
+			World.setBlock(x+coords.x,y+coords.y,z+coords.z, id, data);
 		}
 	}
 }
@@ -215,6 +249,15 @@ Callback.addCallback("GenerateChunk", function(chunkX, chunkZ){
 	}
 	}
 	}
+	if(Math.random()<0.07){
+		var coords = GenerationUtils.randomCoords(chunkX, chunkZ, 1, 256);
+		coords.y = gS(coords.x, coords.z);
+		if(World.getBlock(coords.x, coords.y, coords.z).id==0){
+		World.setBlock(coords.x, coords.y, coords.z, BlockID.fironia);
+		World.addTileEntity(coords.x, coords.y, coords.z);
+		BlockRenderer.forceRenderRebuild(coords.x, coords.y, coords.z,0);
+		}
+	}
 	for(var i = 0; i<=6; i++){
 		var random = Math.floor(Math.random()*2);
 		var coords = GenerationUtils.randomCoords(chunkX, chunkZ, 1, 256);
@@ -245,3 +288,5 @@ Callback.addCallback("GenerateChunk", function(chunkX, chunkZ){
 	}
 	}
 });
+
+
